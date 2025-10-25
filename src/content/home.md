@@ -5,4 +5,4 @@ avatarImage:
 githubCalendar: 'razrinn'
 ---
 
-Welcome to the example site. This site is meant to show off my custom Astro theme/template **MultiTerm** which creates a coder-ready blog complete with an interactive theme changer, RSS, sitemap, tagging, and markdown extensions.
+Hi I’m Ray, a software engineer with 4+ years of experience. Here, I share my lessons and thoughts on building fast, scalable, and enjoyable software.

@@ -136,8 +136,8 @@ if (postData.tags && postData.tags.length > 0) {
     ) : prev || next ? (
       <section>
         <DividerText text="More Posts" />
-        {prev && <PostPreview post={prev} />}
-        {next && <PostPreview post={next} />}
+        {prev && <PostPreview post={prev} simple />}
+        {next && <PostPreview post={next} simple />}
       </section>
     ) : null
   }
