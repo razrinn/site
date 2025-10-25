@@ -4,4 +4,4 @@ avatarImage:
   alt: 'My avatar'
 ---
 
-Thanks for reading my blog post! Feel free to check out my other posts or contact me.
+Thanks for reading! Feel free to leave a comment or reaction, check out my other posts, or reach out if you’d like to connect.
