@@ -6,6 +6,7 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "none",
-    "run_worker_first": ["/giscus/tokyo-night.css"],
+    "binding": "ASSETS",
+    "run_worker_first": ["/giscus/*.css"],
   },
 }
