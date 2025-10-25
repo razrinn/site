@@ -4,5 +4,7 @@
   "compatibility_date": "2025-10-24",
   "assets": {
     "directory": "./dist",
+    "not_found_handling": "none",
+    "run_worker_first": ["/giscus/tokyo-night.css"],
   },
 }
