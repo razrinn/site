@@ -6,6 +6,7 @@ const giscusConfig = siteConfig.giscus
 if (!giscusConfig) {
   throw new Error('Giscus configuration is missing in site.config.ts')
 }
+console.log(giscusConfig)
 const repo = giscusConfig.repo
 const repoId = giscusConfig.repoId
 const category = giscusConfig.category
