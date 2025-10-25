@@ -7,11 +7,19 @@ const config: SiteConfig = {
   title: 'rzrn.dev',
   // The description of your site, used for SEO and RSS feed.
   description:
-    "rzrn - Ray Azrin Karim's personal site that shares about software development",
+    'rzrn - personal site that shares about software development and other topics',
   // The author of the site, used in the footer, SEO, and RSS feed.
   author: 'Ray Azrin Karim',
   // Keywords for SEO, used in the meta tags.
-  tags: ['Ray Azrin', 'Ray Azrin Karim', 'Blog', 'TypeScript', 'Web Development'],
+  tags: [
+    'Ray Azrin',
+    'Ray Azrin Karim',
+    'Blog',
+    'TypeScript',
+    'Web Development',
+    'Software Development',
+    'Personal Blog',
+  ],
   // Path to the image used for generating social media previews.
   // Needs to be a square JPEG file due to limitations of the social card generator.
   // Try https://squoosh.app/ to easily convert images to JPEG.
