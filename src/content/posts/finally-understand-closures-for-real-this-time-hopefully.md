@@ -1,10 +1,9 @@
 ---
-title: "Finally Understand Closures (for Real This Time (Hopefully))"
+title: 'Finally Understand Closures (for Real This Time (Hopefully))'
 published: 2025-10-26
 draft: false
 tags: ['javascript', 'typescript', 'fundamental']
 ---
-
 
 Have you ever come across the term `closure`? Or maybe even been asked about it during an interview? You might have a rough idea of what it means, but not a deep understanding. In this post, we’ll take a closer look at what closures really are and explore several practical examples of how they’re used in real-world applications.
 
@@ -48,6 +47,7 @@ When your JavaScript code runs, the engine creates **execution contexts**. Think
 3. **Scope Chain** - the lookup path to find variables in outer scopes
 
 Let's go back to our simple example and see what actually happens:
+
 ```typescript
 function outside() {
   const num = 123;
@@ -61,6 +61,7 @@ printNum();
 ```
 
 Here's what's going on behind the scenes:
+
 ```
 Global Context
 │
@@ -83,18 +84,21 @@ When printNum() runs:
 ```
 
 **Step 1: `outside()` gets called**
+
 - JavaScript creates a new execution context for `outside()`
 - The variable `num` lives in this context's environment
 - When `inner` is created, here's the key part: it **captures a reference** to `outside()`'s environment
 - That reference? That's your closure right there
 
 **Step 2: `outside()` finishes and returns**
+
 - Normally when a function finishes, its execution context gets destroyed
 - All those variables? Gone. Garbage collected
 - But wait, `inner` is still holding onto a reference to `outside()`'s environment
 - So JavaScript keeps that environment alive in memory instead of throwing it away
 
 **Step 3: `printNum()` runs**
+
 - New execution context gets created for `inner` (which we're calling as `printNum`)
 - It tries to find `num`, not in the local scope
 - JavaScript follows the scope chain to the captured environment
@@ -115,6 +119,7 @@ So when we say closures "remember" stuff - they literally do. They carry around 
 ### Memory Stuff You Should Know
 
 Because closures keep environments alive, there's a memory trade-off:
+
 ```typescript
 function createCounter() {
   let count = 0;
@@ -138,6 +143,7 @@ The whole environment gets preserved, not just the variables you actually use. M
 JavaScript has closures because of **lexical scoping**. Basically, where you write a function in your code determines what variables it can see, not where you call it from.
 
 Closures happen naturally because JavaScript has:
+
 1. First-class functions (you can pass functions around like any other value)
 2. Lexical scoping (scope is determined by where code is written)
 3. Functions that can reach into outer scopes

@@ -1,13 +1,13 @@
 ---
-import type { MarkdownHeading } from 'astro'
+import type { MarkdownHeading } from 'astro';
 
 interface Props {
-  heading: MarkdownHeading
+  heading: MarkdownHeading;
 }
 
 const {
   heading: { depth, slug, text },
-} = Astro.props
+} = Astro.props;
 ---
 
 <li class="flex items-stretch border-foreground/20">

@@ -1,5 +1,5 @@
 ---
-import IconChevronUp from '~/icons/chevron-up.svg'
+import IconChevronUp from '~/icons/chevron-up.svg';
 ---
 
 <button
@@ -17,62 +17,62 @@ import IconChevronUp from '~/icons/chevron-up.svg'
   ) {
     const listener = (e: TransitionEvent) => {
       if (e.target === element && e.propertyName === transitionProperty) {
-        element.setAttribute('hidden', 'true')
-        element.removeEventListener('transitionend', listener)
+        element.setAttribute('hidden', 'true');
+        element.removeEventListener('transitionend', listener);
       }
-    }
+    };
     return {
       show() {
-        element.removeEventListener('transitionend', listener)
-        element.removeAttribute('hidden')
+        element.removeEventListener('transitionend', listener);
+        element.removeAttribute('hidden');
         // Force a browser re-paint
-        const _reflow = element.offsetHeight
-        element.classList.add(transitionClass)
+        const _reflow = element.offsetHeight;
+        element.classList.add(transitionClass);
       },
       hide() {
-        element.addEventListener('transitionend', listener)
-        element.classList.remove(transitionClass)
+        element.addEventListener('transitionend', listener);
+        element.classList.remove(transitionClass);
       },
-    }
+    };
   }
 
   function init() {
-    const button = document.querySelector('button.scroll-up') as HTMLButtonElement
-    const topHeading = document.querySelector('h1')
-    const topOffset = topHeading ? topHeading.offsetTop : 0
+    const button = document.querySelector('button.scroll-up') as HTMLButtonElement;
+    const topHeading = document.querySelector('h1');
+    const topOffset = topHeading ? topHeading.offsetTop : 0;
     if (!button) {
-      console.warn('Scroll up button not found in the document.')
-      return
+      console.warn('Scroll up button not found in the document.');
+      return;
     }
     button.addEventListener('click', () => {
-      window.scrollTo({ top: topOffset, behavior: 'smooth' })
-    })
+      window.scrollTo({ top: topOffset, behavior: 'smooth' });
+    });
     // Use IntersectionObserver to show/hide the button
-    const prose = document.querySelector('article div.prose')
+    const prose = document.querySelector('article div.prose');
     if (!prose) {
-      console.warn('Prose element not found in the article.')
-      return
+      console.warn('Prose element not found in the article.');
+      return;
     }
 
-    const btnControl = transitionHiddenElement(button, 'opacity', 'active')
+    const btnControl = transitionHiddenElement(button, 'opacity', 'active');
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            btnControl.show()
+            btnControl.show();
           } else {
-            btnControl.hide()
+            btnControl.hide();
           }
-        })
+        });
       },
       // Only consider the top 5% of the viewport
       { rootMargin: `0px 0px -95% 0px` },
-    )
-    observer.observe(prose)
+    );
+    observer.observe(prose);
   }
 
-  init()
+  init();
 </script>
 
 <style>

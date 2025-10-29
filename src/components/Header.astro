@@ -1,13 +1,13 @@
 ---
-import siteConfig from '~/site.config'
-import LightDarkAutoButton from '~/components/LightDarkAutoButton.astro'
-import Search from '~/components/Search.astro'
-import SelectTheme from '~/components/SelectTheme.astro'
-import NavLink from '~/components/NavLink.astro'
+import siteConfig from '~/site.config';
+import LightDarkAutoButton from '~/components/LightDarkAutoButton.astro';
+import Search from '~/components/Search.astro';
+import SelectTheme from '~/components/SelectTheme.astro';
+import NavLink from '~/components/NavLink.astro';
 
-const lightDarkAutoTheme = siteConfig.themes.mode === 'light-dark-auto'
+const lightDarkAutoTheme = siteConfig.themes.mode === 'light-dark-auto';
 const selectTheme =
-  siteConfig.themes.mode === 'select' && siteConfig.themes.include.length > 1
+  siteConfig.themes.mode === 'select' && siteConfig.themes.include.length > 1;
 ---
 
 <header>
@@ -62,26 +62,26 @@ const selectTheme =
 </header>
 
 <script>
-  const navMobileButton = document.getElementById('nav-mobile-button')
-  const navMobileList = document.getElementById('nav-mobile-list')
-  const navMobileListItems = navMobileList?.querySelectorAll('li')
+  const navMobileButton = document.getElementById('nav-mobile-button');
+  const navMobileList = document.getElementById('nav-mobile-list');
+  const navMobileListItems = navMobileList?.querySelectorAll('li');
   const toggleNavMobileMenu = (action: 'on' | 'off' | 'toggle') => {
-    let isNowOpen: boolean = false
+    let isNowOpen: boolean = false;
     if (action === 'on') {
-      isNowOpen = true
-      navMobileList?.classList.remove('invisible')
+      isNowOpen = true;
+      navMobileList?.classList.remove('invisible');
     } else if (action === 'off') {
-      isNowOpen = false
-      navMobileList?.classList.add('invisible')
+      isNowOpen = false;
+      navMobileList?.classList.add('invisible');
     } else {
-      isNowOpen = !navMobileList?.classList.toggle('invisible')
+      isNowOpen = !navMobileList?.classList.toggle('invisible');
     }
-    navMobileButton?.setAttribute('aria-expanded', isNowOpen ? 'true' : 'false')
+    navMobileButton?.setAttribute('aria-expanded', isNowOpen ? 'true' : 'false');
     navMobileListItems?.forEach((listItem) => {
-      listItem.setAttribute('aria-expanded', isNowOpen ? 'true' : 'false')
-    })
-  }
+      listItem.setAttribute('aria-expanded', isNowOpen ? 'true' : 'false');
+    });
+  };
   navMobileButton?.addEventListener('click', (_ev) => {
-    toggleNavMobileMenu('toggle')
-  })
+    toggleNavMobileMenu('toggle');
+  });
 </script>

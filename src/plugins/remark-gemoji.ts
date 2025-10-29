@@ -1,8 +1,8 @@
-import type { Root, Text } from 'mdast'
-import type { Plugin } from 'unified'
-import { nameToEmoji, emojiToName } from 'gemoji'
-import emojiRegex from 'emoji-regex'
-import { findAndReplace } from 'mdast-util-find-and-replace'
+import type { Root, Text } from 'mdast';
+import type { Plugin } from 'unified';
+import { nameToEmoji, emojiToName } from 'gemoji';
+import emojiRegex from 'emoji-regex';
+import { findAndReplace } from 'mdast-util-find-and-replace';
 
 function emojiSpan(emojiLiteral: string, emojiDescription: string): Text {
   return {
@@ -13,7 +13,7 @@ function emojiSpan(emojiLiteral: string, emojiDescription: string): Text {
       hProperties: { role: 'img', ariaLabel: emojiDescription.replace(/_/g, ' ') },
       hChildren: [{ type: 'text', value: emojiLiteral }],
     },
-  }
+  };
 }
 
 /**
@@ -27,7 +27,7 @@ const plugin: Plugin<[], Root> = () => (tree) => {
       (_: string, emojiShortcode: string) => {
         return Object.hasOwn(nameToEmoji, emojiShortcode)
           ? emojiSpan(nameToEmoji[emojiShortcode], emojiShortcode)
-          : false
+          : false;
       },
     ],
     [
@@ -35,10 +35,10 @@ const plugin: Plugin<[], Root> = () => (tree) => {
       (emojiLiteral: string) => {
         return Object.hasOwn(emojiToName, emojiLiteral)
           ? emojiSpan(emojiLiteral, emojiToName[emojiLiteral])
-          : false
+          : false;
       },
     ],
-  ])
-}
+  ]);
+};
 
-export default plugin
+export default plugin;

@@ -1,14 +1,14 @@
 ---
-import type { CollectionEntry } from 'astro:content'
-import { SeriesGroup } from '~/utils'
+import type { CollectionEntry } from 'astro:content';
+import { SeriesGroup } from '~/utils';
 
 interface Props {
-  posts: CollectionEntry<'posts'>[]
+  posts: CollectionEntry<'posts'>[];
 }
 
-const { posts } = Astro.props
+const { posts } = Astro.props;
 
-const seriesGroup = await SeriesGroup.build(posts)
+const seriesGroup = await SeriesGroup.build(posts);
 ---
 
 <ul class="flex flex-wrap gap-x-3 gap-y-4 my-5">

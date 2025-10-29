@@ -17,10 +17,10 @@ echo "Exploring advanced TypeScript features like conditional types"
 Conditional types in TypeScript allow you to create types based on conditions. Here's an example:
 
 ```typescript
-type IsString<T> = T extends string ? true : false
+type IsString<T> = T extends string ? true : false;
 
-const test1: IsString<string> = true // Valid
-const test2: IsString<number> = false // Valid
+const test1: IsString<string> = true; // Valid
+const test2: IsString<number> = false; // Valid
 ```
 
 Conditional types are particularly useful for creating flexible and reusable type definitions.

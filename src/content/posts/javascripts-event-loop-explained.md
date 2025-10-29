@@ -9,13 +9,13 @@ tags: ['javascript']
 The event loop is a critical part of JavaScript's runtime, enabling asynchronous programming. Here's a simple example:
 
 ```javascript
-console.log('Start')
+console.log('Start');
 
 setTimeout(() => {
-  console.log('Timeout')
-}, 0)
+  console.log('Timeout');
+}, 0);
 
-console.log('End')
+console.log('End');
 ```
 
 Output:

@@ -1,13 +1,13 @@
 ---
-import { Image } from 'astro:assets'
-import GitHubActivityCalendar from '~/components/GitHubActivityCalendar.astro'
-import type { FrontmatterImage } from '~/types'
+import { Image } from 'astro:assets';
+import GitHubActivityCalendar from '~/components/GitHubActivityCalendar.astro';
+import type { FrontmatterImage } from '~/types';
 
 interface Props {
-  avatarImage?: FrontmatterImage
-  githubCalendar?: string
+  avatarImage?: FrontmatterImage;
+  githubCalendar?: string;
 }
-const { avatarImage, githubCalendar } = Astro.props
+const { avatarImage, githubCalendar } = Astro.props;
 ---
 
 <div class="my-6 md:mx-2">

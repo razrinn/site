@@ -1,23 +1,23 @@
 ---
 interface Props {
-  title?: string
-  titlePieces?: string[]
+  title?: string;
+  titlePieces?: string[];
 }
 
-const { title, titlePieces } = Astro.props
+const { title, titlePieces } = Astro.props;
 
 const splitPath: string[] = Astro.url.pathname
   .split('/')
   .filter(Boolean) // Remove empty parts
-  .map((part) => decodeURIComponent(part)) // For Unicode chars kept by github-slugger
+  .map((part) => decodeURIComponent(part)); // For Unicode chars kept by github-slugger
 
-const pieces = titlePieces ?? splitPath
+const pieces = titlePieces ?? splitPath;
 
 if (pieces.length === 0) {
-  pieces.push('home')
+  pieces.push('home');
 }
 
-const titleFromPieces = pieces.map((part) => `/ ${part}`)
+const titleFromPieces = pieces.map((part) => `/ ${part}`);
 ---
 
 <div

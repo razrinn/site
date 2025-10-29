@@ -1,4 +1,4 @@
-import type { SiteConfig } from '~/types'
+import type { SiteConfig } from '~/types';
 
 const config: SiteConfig = {
   // Absolute URL to the root of your published site, used for generating links and sitemaps.
@@ -122,6 +122,6 @@ const config: SiteConfig = {
     unicorn: '/unicorn.webp',
     duck: '/duck.webp',
   },
-}
+};
 
-export default config
+export default config;

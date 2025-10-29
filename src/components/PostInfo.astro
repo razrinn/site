@@ -1,29 +1,29 @@
 ---
-import { dateString, SeriesGroup } from '~/utils'
-import { render, type CollectionEntry } from 'astro:content'
-import type { Collation } from '~/types'
+import { dateString, SeriesGroup } from '~/utils';
+import { render, type CollectionEntry } from 'astro:content';
+import type { Collation } from '~/types';
 
 interface Props {
-  post: CollectionEntry<'posts'>
-  class?: string
+  post: CollectionEntry<'posts'>;
+  class?: string;
 }
 
-const { post, class: className } = Astro.props
-const { remarkPluginFrontmatter } = await render(post)
-const { minutesRead } = remarkPluginFrontmatter
-const seriesFrontmatter = post.data.series
-let series: Collation<'posts'> | undefined
-let seriesPostNumber: number | undefined
-let seriesTotal: number | undefined
+const { post, class: className } = Astro.props;
+const { remarkPluginFrontmatter } = await render(post);
+const { minutesRead } = remarkPluginFrontmatter;
+const seriesFrontmatter = post.data.series;
+let series: Collation<'posts'> | undefined;
+let seriesPostNumber: number | undefined;
+let seriesTotal: number | undefined;
 if (seriesFrontmatter) {
-  const seriesGroup = await SeriesGroup.build()
-  series = seriesGroup.match(seriesFrontmatter)
+  const seriesGroup = await SeriesGroup.build();
+  series = seriesGroup.match(seriesFrontmatter);
   if (!series) {
     // This should never happen if the series data is correct
-    throw new Error(`Series "${seriesFrontmatter}" not found`)
+    throw new Error(`Series "${seriesFrontmatter}" not found`);
   }
-  seriesPostNumber = series.entries.findIndex((p) => p.id === post.id) + 1
-  seriesTotal = series.entries.length
+  seriesPostNumber = series.entries.findIndex((p) => p.id === post.id) + 1;
+  seriesTotal = series.entries.length;
 }
 ---
 

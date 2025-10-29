@@ -1,35 +1,35 @@
 ---
-import '~/styles/global.css'
-import Header from '~/components/Header.astro'
-import Footer from '~/components/Footer.astro'
-import LightDarkAutoThemeLoader from '~/components/LightDarkAutoThemeLoader.astro'
-import SelectThemeLoader from '~/components/SelectThemeLoader.astro'
-import siteConfig from '~/site.config'
-import { pick, resolveThemeColorStyles } from '~/utils'
-import crypto from 'crypto'
+import '~/styles/global.css';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import LightDarkAutoThemeLoader from '~/components/LightDarkAutoThemeLoader.astro';
+import SelectThemeLoader from '~/components/SelectThemeLoader.astro';
+import siteConfig from '~/site.config';
+import { pick, resolveThemeColorStyles } from '~/utils';
+import crypto from 'crypto';
 
 interface Props {
-  title?: string
-  description?: string
-  tags?: string[]
-  author?: string
+  title?: string;
+  description?: string;
+  tags?: string[];
+  author?: string;
 }
 
-const { title, description, tags, author } = Astro.props
-const pageUrl = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, '') // Remove trailing slash for consistency
-const pageType = Astro.url.pathname.startsWith('/posts') ? 'article' : 'website'
-const pageTitle = title ? `${title} - ${siteConfig.title}` : siteConfig.title
-const pageDescription = description || siteConfig.description
-const pageAuthor = author || siteConfig.author
+const { title, description, tags, author } = Astro.props;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href.replace(/\/$/, ''); // Remove trailing slash for consistency
+const pageType = Astro.url.pathname.startsWith('/posts') ? 'article' : 'website';
+const pageTitle = title ? `${title} - ${siteConfig.title}` : siteConfig.title;
+const pageDescription = description || siteConfig.description;
+const pageAuthor = author || siteConfig.author;
 const pageImage =
   pageType === 'article'
     ? Astro.url.origin +
       Astro.url.pathname.replace(/\/posts\//, '/social-cards/') +
       '.png'
-    : `${Astro.url.origin}/social-cards/__default.png`
+    : `${Astro.url.origin}/social-cards/__default.png`;
 const pageKeywords = [
   ...new Set(siteConfig.tags.concat(tags || []).map((word) => word.toLowerCase())),
-].join(', ')
+].join(', ');
 const baseCssVars: { [key: string]: string } = {
   'theme-font': siteConfig.font,
   'ec-frm-frameBoxShdCssVal': 'none',
@@ -37,46 +37,46 @@ const baseCssVars: { [key: string]: string } = {
   'ec-frm-edTabBarBrdCol':
     'color-mix(in srgb, var(--theme-foreground), 10%, transparent)',
   'ec-brdCol': 'color-mix(in srgb, var(--theme-foreground), 10%, transparent)',
-}
+};
 
-let themeMode = siteConfig.themes.mode
+let themeMode = siteConfig.themes.mode;
 if (siteConfig.themes.include.length < 1) {
-  throw new Error('No themes defined in site.config. Please add at least one theme.')
+  throw new Error('No themes defined in site.config. Please add at least one theme.');
 }
 if (themeMode === 'light-dark-auto' && siteConfig.themes.include.length < 2) {
   console.warn(
     'Theme mode "dark-light-auto" requires at least two themes. Defaulting to "single".',
-  )
-  themeMode = 'single'
+  );
+  themeMode = 'single';
 }
-let defaultTheme = siteConfig.themes.default || siteConfig.themes.include[0]
-let includedThemes = siteConfig.themes.include as string[]
-const themeNotIncluded = !includedThemes.includes(defaultTheme)
+let defaultTheme = siteConfig.themes.default || siteConfig.themes.include[0];
+let includedThemes = siteConfig.themes.include as string[];
+const themeNotIncluded = !includedThemes.includes(defaultTheme);
 if (
   (themeMode !== 'light-dark-auto' && themeNotIncluded) ||
   (themeMode === 'light-dark-auto' && defaultTheme !== 'auto' && themeNotIncluded)
 ) {
   console.warn(
     `Default theme "${defaultTheme}" not found in themes. Using first theme: "${siteConfig.themes.include[0]}".`,
-  )
-  defaultTheme = siteConfig.themes.include[0]
+  );
+  defaultTheme = siteConfig.themes.include[0];
 }
-let lightTheme = themeMode === 'light-dark-auto' ? includedThemes[0] : undefined
-let darkTheme = themeMode === 'light-dark-auto' ? includedThemes[1] : undefined
+let lightTheme = themeMode === 'light-dark-auto' ? includedThemes[0] : undefined;
+let darkTheme = themeMode === 'light-dark-auto' ? includedThemes[1] : undefined;
 
 // Generate a hash to use for cache busting the theme settings in localStorage.
 const themeHash = crypto
   .createHash('md5')
   .update(themeMode + defaultTheme + includedThemes.join(''))
   .digest('hex')
-  .slice(0, 8) // Truncate to the first 8 characters
+  .slice(0, 8); // Truncate to the first 8 characters
 
 const resolvedThemes = await resolveThemeColorStyles(
   siteConfig.themes.include,
   siteConfig.themes.overrides,
-)
+);
 
-let cssLines: string[] = []
+let cssLines: string[] = [];
 for (const [themeId, themeStyles] of Object.entries(resolvedThemes)) {
   const relevantStyles = pick(themeStyles, [
     'foreground',
@@ -103,14 +103,14 @@ for (const [themeId, themeStyles] of Object.entries(resolvedThemes)) {
     'yellow',
     'magenta',
     'cyan',
-  ])
-  cssLines.push(`:root[data-theme="${themeId}"] {`)
+  ]);
+  cssLines.push(`:root[data-theme="${themeId}"] {`);
   for (const [key, value] of Object.entries(relevantStyles)) {
-    cssLines.push(`--theme-${key}: ${value};`)
+    cssLines.push(`--theme-${key}: ${value};`);
   }
-  cssLines.push(`}`)
+  cssLines.push(`}`);
 }
-let generatedCss: string = cssLines.join('\n')
+let generatedCss: string = cssLines.join('\n');
 ---
 
 <!doctype html>

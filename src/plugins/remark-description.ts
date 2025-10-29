@@ -1,9 +1,9 @@
-import type * as mdast from 'mdast'
-import type { RemarkPlugin } from '@astrojs/markdown-remark'
-import { toString } from 'mdast-util-to-string'
+import type * as mdast from 'mdast';
+import type { RemarkPlugin } from '@astrojs/markdown-remark';
+import { toString } from 'mdast-util-to-string';
 
 const remarkDescription: RemarkPlugin = (options?: { maxChars?: number }) => {
-  const maxChars = (options && options.maxChars) || 200
+  const maxChars = (options && options.maxChars) || 200;
   return function (tree, { data }) {
     function findFirstParagraph(
       node: mdast.Root | mdast.RootContent,
@@ -15,29 +15,29 @@ const remarkDescription: RemarkPlugin = (options?: { maxChars?: number }) => {
             child.children.length > 0 &&
             child.children[0].type !== 'image'
           ) {
-            const s = toString(child).trim()
+            const s = toString(child).trim();
             if (s.length > 0) {
-              return s
+              return s;
             }
           } else {
-            const result = findFirstParagraph(child)
+            const result = findFirstParagraph(child);
             if (result) {
-              return result
+              return result;
             }
           }
         }
       }
-      return undefined
+      return undefined;
     }
-    let description = data.astro?.frontmatter?.description || findFirstParagraph(tree)
+    let description = data.astro?.frontmatter?.description || findFirstParagraph(tree);
     if (description && data.astro?.frontmatter) {
       if (description.length > maxChars) {
-        const lastSpace = description.slice(0, maxChars).lastIndexOf(' ')
-        description = description.slice(0, lastSpace) + '…'
+        const lastSpace = description.slice(0, maxChars).lastIndexOf(' ');
+        description = description.slice(0, lastSpace) + '…';
       }
-      data.astro.frontmatter.description = description
+      data.astro.frontmatter.description = description;
     }
-  }
-}
+  };
+};
 
-export default remarkDescription
+export default remarkDescription;

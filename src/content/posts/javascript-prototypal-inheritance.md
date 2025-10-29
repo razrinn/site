@@ -11,12 +11,12 @@ Prototypal inheritance is a feature in JavaScript that allows objects to inherit
 ```javascript
 const parent = {
   greet() {
-    console.log('Hello from parent!')
+    console.log('Hello from parent!');
   },
-}
+};
 
-const child = Object.create(parent)
-child.greet() // Hello from parent!
+const child = Object.create(parent);
+child.greet(); // Hello from parent!
 ```
 
 Prototypal inheritance is a flexible way to share behavior between objects without using classes.

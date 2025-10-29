@@ -10,22 +10,22 @@ The `keyof` operator and mapped types in TypeScript allow for advanced type mani
 
 ```typescript
 interface User {
-  id: number
-  name: string
-  email: string
+  id: number;
+  name: string;
+  email: string;
 }
 
-type UserKeys = keyof User // 'id' | 'name' | 'email'
+type UserKeys = keyof User; // 'id' | 'name' | 'email'
 
 type ReadonlyUser = {
-  [K in keyof User]: Readonly<User[K]>
-}
+  [K in keyof User]: Readonly<User[K]>;
+};
 
 const user: ReadonlyUser = {
   id: 1,
   name: 'John',
   email: 'john@example.com',
-}
+};
 
 // user.id = 2; // Error: Cannot assign to 'id' because it is a read-only property.
 ```

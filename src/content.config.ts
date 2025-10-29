@@ -1,5 +1,5 @@
-import { defineCollection, z } from 'astro:content'
-import { glob } from 'astro/loaders'
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const postsCollection = defineCollection({
   loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: './src/content/posts' }),
@@ -21,7 +21,7 @@ const postsCollection = defineCollection({
         .optional(),
       toc: z.boolean().optional().default(true),
     }),
-})
+});
 
 const homeCollection = defineCollection({
   loader: glob({ pattern: ['home.md', 'home.mdx'], base: './src/content' }),
@@ -35,7 +35,7 @@ const homeCollection = defineCollection({
         .optional(),
       githubCalendar: z.string().optional(), // GitHub username for calendar
     }),
-})
+});
 
 const addendumCollection = defineCollection({
   loader: glob({ pattern: ['addendum.md', 'addendum.mdx'], base: './src/content' }),
@@ -48,10 +48,10 @@ const addendumCollection = defineCollection({
         })
         .optional(),
     }),
-})
+});
 
 export const collections = {
   posts: postsCollection,
   home: homeCollection,
   addendum: addendumCollection,
-}
+};

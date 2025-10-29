@@ -11,15 +11,15 @@ Async/await simplifies working with asynchronous code in JavaScript. Here's an e
 ```javascript
 async function fetchData() {
   try {
-    const response = await fetch('https://api.example.com/data')
-    const data = await response.json()
-    console.log(data)
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data);
   } catch (error) {
-    console.error('Error fetching data:', error)
+    console.error('Error fetching data:', error);
   }
 }
 
-fetchData()
+fetchData();
 ```
 
 Async/await is built on top of Promises and makes the code more readable and maintainable.

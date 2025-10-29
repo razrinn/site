@@ -10,30 +10,30 @@ Generics in TypeScript allow you to create reusable and type-safe components. He
 
 ```typescript
 function identity<T>(arg: T): T {
-  return arg
+  return arg;
 }
 
-console.log(identity<string>('Hello'))
-console.log(identity<number>(42))
+console.log(identity<string>('Hello'));
+console.log(identity<number>(42));
 ```
 
 Generics can also be used with classes and interfaces:
 
 ```typescript
 class Box<T> {
-  private content: T
+  private content: T;
 
   constructor(content: T) {
-    this.content = content
+    this.content = content;
   }
 
   getContent(): T {
-    return this.content
+    return this.content;
   }
 }
 
-const stringBox = new Box<string>('TypeScript')
-console.log(stringBox.getContent())
+const stringBox = new Box<string>('TypeScript');
+console.log(stringBox.getContent());
 ```
 
 Generics are a powerful feature that can make your TypeScript code more flexible and maintainable.

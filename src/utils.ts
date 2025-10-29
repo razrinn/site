@@ -6,43 +6,43 @@ import {
   type ThemeOverrides,
   type Collation,
   type CollationGroup,
-} from '~/types'
+} from '~/types';
 import {
   loadShikiTheme,
   type BundledShikiTheme,
   type ExpressiveCodeTheme,
-} from 'astro-expressive-code'
-import { getCollection, type CollectionEntry } from 'astro:content'
-import Color from 'color'
-import { slug } from 'github-slugger'
+} from 'astro-expressive-code';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Color from 'color';
+import { slug } from 'github-slugger';
 
 export function dateString(date: Date) {
-  return date.toISOString().split('T')[0]
+  return date.toISOString().split('T')[0];
 }
 
 export function pick(obj: Record<string, any>, keys: string[]) {
   return Object.fromEntries(
     keys.filter((key) => key in obj).map((key) => [key, obj[key]]),
-  )
+  );
 }
 
 export function flattenThemeColors(theme: ExpressiveCodeTheme): {
-  [key: string]: string
+  [key: string]: string;
 } {
   const scopedThemeSettings = theme.settings.reduce(
     (acc, item) => {
-      const { scope, settings } = item
-      const { foreground } = settings
+      const { scope, settings } = item;
+      const { foreground } = settings;
       if (scope && foreground) {
         for (const s of scope) {
-          acc[s] = foreground.toLowerCase().trim()
+          acc[s] = foreground.toLowerCase().trim();
         }
       }
-      return acc
+      return acc;
     },
     {} as { [key: string]: string },
-  )
-  return { ...theme.colors, ...scopedThemeSettings }
+  );
+  return { ...theme.colors, ...scopedThemeSettings };
 }
 
 const unresolvedStyles: TextmateStyles = {
@@ -157,7 +157,7 @@ const unresolvedStyles: TextmateStyles = {
   yellow: ['terminal.ansiYellow', 'terminal.ansiBrightYellow'],
   magenta: ['terminal.ansiMagenta', 'terminal.ansiBrightMagenta'],
   cyan: ['terminal.ansiCyan', 'terminal.ansiBrightCyan'],
-}
+};
 
 export async function resolveThemeColorStyles(
   themes: BundledShikiTheme[],
@@ -165,102 +165,102 @@ export async function resolveThemeColorStyles(
 ): Promise<ThemesWithColorStyles> {
   const validateColor = (color: string) => {
     // Check if the color is a valid hex, rgb, or hsl color via regex
-    const colorRegex = /^(#|rgb|hsl)/i
-    if (!colorRegex.test(color)) return undefined
+    const colorRegex = /^(#|rgb|hsl)/i;
+    if (!colorRegex.test(color)) return undefined;
     try {
-      return new Color(color).hex()
+      return new Color(color).hex();
     } catch {
-      return undefined
+      return undefined;
     }
-  }
+  };
   const resolvedThemes = themes.map(async (theme) => {
-    const loadedTheme = await loadShikiTheme(theme)
-    const flattenedTheme = flattenThemeColors(loadedTheme)
-    const result = {} as { [key in ThemeKey]: string }
+    const loadedTheme = await loadShikiTheme(theme);
+    const flattenedTheme = flattenThemeColors(loadedTheme);
+    const result = {} as { [key in ThemeKey]: string };
     for (const themeKey of Object.keys(unresolvedStyles) as ThemeKey[]) {
       if (overrides?.[theme]?.[themeKey]) {
-        const override = overrides[theme][themeKey]
-        const overrideColor = validateColor(override)
+        const override = overrides[theme][themeKey];
+        const overrideColor = validateColor(override);
         if (overrideColor) {
-          result[themeKey] = override
-          continue
+          result[themeKey] = override;
+          continue;
         }
         // If the override is not a valid color, try to resolve it as a highlight group
         if (themeKeys.includes(override as ThemeKey)) {
           for (const textmateGroup of unresolvedStyles[override as ThemeKey]) {
             if (flattenedTheme[textmateGroup]) {
-              result[themeKey] = flattenedTheme[textmateGroup]
-              break
+              result[themeKey] = flattenedTheme[textmateGroup];
+              break;
             }
           }
         }
         if (result[themeKey]) {
-          continue
+          continue;
         } else {
           console.warn(
             `Theme "${theme}" has an override for "${themeKey}" with value "${override}", but it is neither a theme key nor valid color.`,
-          )
+          );
         }
       }
       for (const textmateGroup of unresolvedStyles[themeKey]) {
         if (flattenedTheme[textmateGroup]) {
-          result[themeKey] = flattenedTheme[textmateGroup]
-          break
+          result[themeKey] = flattenedTheme[textmateGroup];
+          break;
         }
       }
     }
-    return [theme, result]
-  })
-  return Object.fromEntries(await Promise.all(resolvedThemes)) as ThemesWithColorStyles
+    return [theme, result];
+  });
+  return Object.fromEntries(await Promise.all(resolvedThemes)) as ThemesWithColorStyles;
 }
 
 export async function getSortedPosts() {
   const allPosts = await getCollection('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
   const sortedPosts = allPosts.sort((a, b) => {
-    return a.data.published < b.data.published ? -1 : 1
-  })
-  return sortedPosts
+    return a.data.published < b.data.published ? -1 : 1;
+  });
+  return sortedPosts;
 }
 
 abstract class PostsCollationGroup implements CollationGroup<'posts'> {
-  title: string
-  url: string
-  collations: Collation<'posts'>[]
+  title: string;
+  url: string;
+  collations: Collation<'posts'>[];
 
   constructor(title: string, url: string, collations: Collation<'posts'>[]) {
-    this.title = title
-    this.url = url
-    this.collations = collations
+    this.title = title;
+    this.url = url;
+    this.collations = collations;
   }
 
   sortCollationsAlpha(): Collation<'posts'>[] {
-    this.collations.sort((a, b) => a.title.localeCompare(b.title))
-    return this.collations
+    this.collations.sort((a, b) => a.title.localeCompare(b.title));
+    return this.collations;
   }
 
   sortCollationsLargest(): Collation<'posts'>[] {
-    this.collations.sort((a, b) => b.entries.length - a.entries.length)
-    return this.collations
+    this.collations.sort((a, b) => b.entries.length - a.entries.length);
+    return this.collations;
   }
 
   sortCollationsMostRecent(): Collation<'posts'>[] {
     this.collations.sort((a, b) => {
-      const aDate = a.entries[a.entries.length - 1].data.published
-      const bDate = b.entries[b.entries.length - 1].data.published
-      return aDate < bDate ? 1 : -1
-    })
-    return this.collations
+      const aDate = a.entries[a.entries.length - 1].data.published;
+      const bDate = b.entries[b.entries.length - 1].data.published;
+      return aDate < bDate ? 1 : -1;
+    });
+    return this.collations;
   }
 
   add(item: CollectionEntry<'posts'>, collationTitle: string): void {
-    const collationTitleSlug = slug(collationTitle.trim())
-    const existing = this.collations.find((i) => i.titleSlug === collationTitleSlug)
+    const collationTitleSlug = slug(collationTitle.trim());
+    const existing = this.collations.find((i) => i.titleSlug === collationTitleSlug);
     if (existing) {
-      const alreadyHasThisPost = existing.entries.find((e) => e.id === item.id)
+      const alreadyHasThisPost = existing.entries.find((e) => e.id === item.id);
       if (!alreadyHasThisPost) {
-        existing.entries.push(item)
+        existing.entries.push(item);
       }
     } else {
       this.collations.push({
@@ -268,55 +268,55 @@ abstract class PostsCollationGroup implements CollationGroup<'posts'> {
         titleSlug: collationTitleSlug,
         url: `${this.url}/${encodeURIComponent(collationTitleSlug)}`,
         entries: [item],
-      })
+      });
     }
   }
 
   match(rawKey: string): Collation<'posts'> | undefined {
-    return this.collations.find((entry) => entry.title === rawKey)
+    return this.collations.find((entry) => entry.title === rawKey);
   }
 
   matchMany(rawKeys: string[]): Collation<'posts'>[] {
-    return this.collations.filter((entry) => rawKeys.includes(entry.title))
+    return this.collations.filter((entry) => rawKeys.includes(entry.title));
   }
 }
 
 export class SeriesGroup extends PostsCollationGroup {
   // Private constructor to enforce the use of the static build method
   private constructor(title: string, url: string, items: Collation<'posts'>[]) {
-    super(title, url, items)
+    super(title, url, items);
   }
   // Factory method to create a SeriesGroup instance with async data fetching
   static async build(posts?: CollectionEntry<'posts'>[]): Promise<SeriesGroup> {
-    const sortedPosts = posts || (await getSortedPosts())
-    const seriesGroup = new SeriesGroup('Series', '/series', [])
+    const sortedPosts = posts || (await getSortedPosts());
+    const seriesGroup = new SeriesGroup('Series', '/series', []);
     sortedPosts.forEach((post) => {
-      const frontmatterSeries = post.data.series
+      const frontmatterSeries = post.data.series;
       if (frontmatterSeries) {
-        seriesGroup.add(post, frontmatterSeries)
+        seriesGroup.add(post, frontmatterSeries);
       }
-    })
-    return seriesGroup
+    });
+    return seriesGroup;
   }
 }
 
 export class TagsGroup extends PostsCollationGroup {
   // Private constructor to enforce the use of the static build method
   private constructor(title: string, url: string, items: Collation<'posts'>[]) {
-    super(title, url, items)
+    super(title, url, items);
   }
 
   // Factory method to create a SeriesGroup instance with async data fetching
   static async build(posts?: CollectionEntry<'posts'>[]): Promise<SeriesGroup> {
-    const sortedPosts = posts || (await getSortedPosts())
-    const tagsGroup = new TagsGroup('Tags', '/tags', [])
+    const sortedPosts = posts || (await getSortedPosts());
+    const tagsGroup = new TagsGroup('Tags', '/tags', []);
     sortedPosts.forEach((post) => {
-      const frontmatterTags = post.data.tags || []
+      const frontmatterTags = post.data.tags || [];
       frontmatterTags.forEach((tag) => {
-        tagsGroup.add(post, tag)
-      })
-    })
-    return tagsGroup
+        tagsGroup.add(post, tag);
+      });
+    });
+    return tagsGroup;
   }
 }
 
@@ -324,8 +324,8 @@ export function getPostSequenceContext(
   post: CollectionEntry<'posts'>,
   posts: CollectionEntry<'posts'>[],
 ) {
-  const index = posts.findIndex((p) => p.id === post.id)
-  const prev = index > 0 ? posts[index - 1] : undefined
-  const next = index < posts.length - 1 ? posts[index + 1] : undefined
-  return { index, prev, next }
+  const index = posts.findIndex((p) => p.id === post.id);
+  const prev = index > 0 ? posts[index - 1] : undefined;
+  const next = index < posts.length - 1 ? posts[index + 1] : undefined;
+  return { index, prev, next };
 }

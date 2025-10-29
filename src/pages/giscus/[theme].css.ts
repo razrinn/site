@@ -1,50 +1,50 @@
-import { type BundledShikiTheme } from 'astro-expressive-code'
-import siteConfig from '~/site.config'
-import type { APIContext } from 'astro'
-import { resolveThemeColorStyles } from '~/utils'
-import Color from 'color'
-import type { ColorStyles } from '~/types'
+import { type BundledShikiTheme } from 'astro-expressive-code';
+import siteConfig from '~/site.config';
+import type { APIContext } from 'astro';
+import { resolveThemeColorStyles } from '~/utils';
+import Color from 'color';
+import type { ColorStyles } from '~/types';
 
 interface Props {
-  theme: BundledShikiTheme
-  colorStyles: ColorStyles
+  theme: BundledShikiTheme;
+  colorStyles: ColorStyles;
 }
 
 const createCss = (styles: ColorStyles) => {
   const muted = (color: string, amount: number) => {
-    const x = Color(color)
-    return x.alpha(amount / 100).rgb()
-  }
-  const foreground = styles.foreground
-  const background = styles.background
-  const link = styles.link
-  const accent = styles.accent
-  const comment = styles.comment
-  const constant = styles.foreground
-  const entity = styles.entity
-  const storageModifierImport = foreground
-  const tag = styles.tag
-  const keyword = styles.keyword
-  const string = styles.string
-  const variable = styles.variable
-  const brackethighlighterUnmatched = styles.comment
-  const invalidIllegalText = styles.red
-  const carriageReturnText = styles.comment
-  const regexp = styles.regexp
-  const markupList = foreground
-  const markupHeading = styles.foreground
-  const markupItalic = styles.italic
-  const markupBold = styles.foreground
-  const changedText = foreground
-  const ignoredText = styles.comment
-  const red = styles.red
-  const green = styles.green
-  const blue = styles.blue
-  const yellow = styles.yellow
+    const x = Color(color);
+    return x.alpha(amount / 100).rgb();
+  };
+  const foreground = styles.foreground;
+  const background = styles.background;
+  const link = styles.link;
+  const accent = styles.accent;
+  const comment = styles.comment;
+  const constant = styles.foreground;
+  const entity = styles.entity;
+  const storageModifierImport = foreground;
+  const tag = styles.tag;
+  const keyword = styles.keyword;
+  const string = styles.string;
+  const variable = styles.variable;
+  const brackethighlighterUnmatched = styles.comment;
+  const invalidIllegalText = styles.red;
+  const carriageReturnText = styles.comment;
+  const regexp = styles.regexp;
+  const markupList = foreground;
+  const markupHeading = styles.foreground;
+  const markupItalic = styles.italic;
+  const markupBold = styles.foreground;
+  const changedText = foreground;
+  const ignoredText = styles.comment;
+  const red = styles.red;
+  const green = styles.green;
+  const blue = styles.blue;
+  const yellow = styles.yellow;
   // const magenta = styles.magenta
   // const cyan = styles.cyan
 
-  const altBackground = muted(foreground, 5).mix(Color(background), 0.5).hex()
+  const altBackground = muted(foreground, 5).mix(Color(background), 0.5).hex();
   return `
 /*!
  * Modified from GitHub's Dark Dimmed theme, licensed under the MIT License
@@ -189,12 +189,12 @@ div.gsc-comment-content code {
 main .gsc-loading-image {
   background-image: url("https://github.githubassets.com/images/mona-loading-dimmed.gif");
 }
-`
-}
+`;
+};
 
 export async function GET(context: APIContext) {
-  const { colorStyles } = context.props as Props
-  const css = createCss(colorStyles)
+  const { colorStyles } = context.props as Props;
+  const css = createCss(colorStyles);
   return new Response(css, {
     headers: {
       'Access-Control-Allow-Origin': 'https://giscus.app',
@@ -202,18 +202,18 @@ export async function GET(context: APIContext) {
       'Cache-Control': 'public, max-age=31536000, immutable',
       'Content-Type': 'text/css',
     },
-  })
+  });
 }
 
 export async function getStaticPaths() {
   const resolvedColorStyles = await resolveThemeColorStyles(
     siteConfig.themes.include,
     siteConfig.themes.overrides,
-  )
+  );
   return siteConfig.themes.include.map((theme) => {
     return {
       params: { theme },
       props: { colorStyles: resolvedColorStyles[theme] },
-    }
-  })
+    };
+  });
 }

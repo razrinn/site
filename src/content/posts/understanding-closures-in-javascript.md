@@ -13,29 +13,29 @@ Closures are a fundamental concept in JavaScript that allow functions to access 
 ```javascript
 function outerFunction(outerVariable) {
   return function innerFunction(innerVariable) {
-    console.log(`Outer Variable: ${outerVariable}`)
-    console.log(`Inner Variable: ${innerVariable}`)
-  }
+    console.log(`Outer Variable: ${outerVariable}`);
+    console.log(`Inner Variable: ${innerVariable}`);
+  };
 }
 
-const newFunction = outerFunction('outside')
-newFunction('inside')
+const newFunction = outerFunction('outside');
+newFunction('inside');
 ```
 
 Closures are particularly useful for creating private variables and functions. For example:
 
 ```javascript
 function Counter() {
-  let count = 0
+  let count = 0;
   return {
     increment: () => count++,
     getCount: () => count,
-  }
+  };
 }
 
-const counter = Counter()
-counter.increment()
-console.log(counter.getCount()) // 1
+const counter = Counter();
+counter.increment();
+console.log(counter.getCount()); // 1
 ```
 
 Closures are a powerful tool in JavaScript, enabling encapsulation and modularity.
