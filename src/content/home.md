@@ -5,4 +5,4 @@ avatarImage:
 githubCalendar: 'razrinn'
 ---
 
-Hi I’m Ray, a software engineer with 4+ years of experience. Here, I share my lessons and thoughts on building fast, scalable, and enjoyable software.
+Hi I’m Ray, a software engineer with 5+ years of experience. Here, I share my experiences, thoughts, lessons, and experiments related to software development.
