@@ -1,7 +1,7 @@
 ---
 title: "Building a Poor Man's React Query from Scratch"
 published: 2025-10-30
-draft: true
+draft: false
 tags: ['javascript', 'typescript', 'react']
 ---
 
