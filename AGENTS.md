@@ -37,6 +37,7 @@ For build/tutorial posts:
 - Use code examples for every important idea.
 - Show output when it helps.
 - Use ASCII diagrams for tricky flow.
+- Use the available article components from `/formatting-showcase` when they make the post clearer: admonitions, tables, figures, captions, dialogue, cards, details, math, and titled code blocks.
 - Use analogies, but keep them short and everyday.
 - Weave design patterns into the explanation naturally. Do not add formal "Design Pattern Connection" callouts.
 - Use bold for key terms and list labels.

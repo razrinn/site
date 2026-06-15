@@ -1,30 +1,31 @@
 ---
-title: 'useSyncExternalStore, Part 2: Real-World Cases and Rough Edges'
+title: 'useSyncExternalStore in Real Apps: Part 2'
 published: 2026-06-15
 draft: true
 description: 'Use React useSyncExternalStore with browser APIs, localStorage, selectors, SSR, and practical external state patterns.'
 tags: ['javascript', 'typescript', 'react']
 ---
 
-In [Part 1](/posts/reading-external-state-with-usesyncexternalstore), we built a tiny store and learned the basic `useSyncExternalStore` contract:
+In [Part 1](/posts/reading-external-state-with-usesyncexternalstore), we kept things tiny on purpose.
+
+One store. One component. One basic `useSyncExternalStore` contract:
 
 ```tsx
 const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 ```
 
-This part is about the stuff we intentionally skipped.
-
-The hook is small, but real apps add details:
+This part is about the stuff that shows up as soon as the example leaves the blog post:
 
 - Browser APIs
 - `localStorage`
 - Cross-tab updates
+- WebSocket data caches
 - Server rendering
 - Selectors
 - Stable snapshots
-- Error boundaries around weird external data
+- Invalid external data
 
-Let's go through the practical cases.
+Let's go through the practical cases, one at a time.
 
 ## Online Status
 
@@ -77,11 +78,19 @@ Here is a tiny pathname hook:
 ```tsx
 import { useSyncExternalStore } from 'react';
 
+const listeners = new Set<() => void>();
+
+function emitChange() {
+  listeners.forEach((listener) => listener());
+}
+
 function subscribe(callback: () => void) {
-  window.addEventListener('popstate', callback);
+  listeners.add(callback);
+  window.addEventListener('popstate', emitChange);
 
   return () => {
-    window.removeEventListener('popstate', callback);
+    listeners.delete(callback);
+    window.removeEventListener('popstate', emitChange);
   };
 }
 
@@ -96,11 +105,16 @@ function getServerSnapshot() {
 export function usePathname() {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
+
+export function navigate(pathname: string) {
+  history.pushState(null, '', pathname);
+  emitChange();
+}
 ```
 
 This handles back and forward navigation.
 
-But it does not automatically catch every `history.pushState` call, because `pushState` does not fire a `popstate` event by itself. If your app owns navigation, notify your listeners when you push a new URL.
+The `navigate` helper covers programmatic navigation too, because `history.pushState` does not fire a `popstate` event by itself.
 
 That is the pattern to remember:
 
@@ -178,6 +192,146 @@ function ThemeToggle() {
 ```
 
 This covers same-tab updates and cross-tab updates.
+
+## WebSocket Cache
+
+A WebSocket cache is another good fit because market data changes outside React.
+
+Let's say the server sends price updates like this:
+
+```json
+{ "symbol": "BTC-USD", "open": 104200, "high": 105100, "low": 103900, "close": 104850 }
+```
+
+The store can own the socket and keep the latest candle in memory.
+
+```ts
+export type Ohlc = {
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+};
+
+export type MarketSnapshot = {
+  status: 'connecting' | 'open' | 'closed';
+  current: Ohlc | null;
+  change: number;
+};
+
+const listeners = new Set<() => void>();
+let snapshot: MarketSnapshot = {
+  status: 'connecting',
+  current: null,
+  change: 0,
+};
+
+function emitChange() {
+  listeners.forEach((listener) => listener());
+}
+
+function setSnapshot(nextSnapshot: MarketSnapshot) {
+  snapshot = nextSnapshot;
+  emitChange();
+}
+
+const socket = new WebSocket('wss://example.com/markets/BTC-USD');
+
+socket.addEventListener('open', () => {
+  setSnapshot({ ...snapshot, status: 'open' });
+});
+
+socket.addEventListener('close', () => {
+  setSnapshot({ ...snapshot, status: 'closed' });
+});
+
+socket.addEventListener('message', (event) => {
+  const next = JSON.parse(event.data) as Ohlc;
+  const previousClose = snapshot.current?.close ?? next.open;
+
+  setSnapshot({
+    ...snapshot,
+    current: next,
+    change: next.close - previousClose,
+  });
+});
+
+export const marketStore = {
+  getSnapshot() {
+    return snapshot;
+  },
+
+  subscribe(listener: () => void) {
+    listeners.add(listener);
+
+    return () => {
+      listeners.delete(listener);
+    };
+  },
+};
+```
+
+Then React gets a normal hook:
+
+```tsx
+import { useSyncExternalStore } from 'react';
+import type { MarketSnapshot } from './marketStore';
+import { marketStore } from './marketStore';
+
+const emptyMarketSnapshot: MarketSnapshot = {
+  status: 'closed',
+  current: null,
+  change: 0,
+};
+
+export function useMarket() {
+  return useSyncExternalStore(
+    marketStore.subscribe,
+    marketStore.getSnapshot,
+    () => emptyMarketSnapshot,
+  );
+}
+```
+
+And the component just renders the current snapshot:
+
+```tsx
+function MarketTicker() {
+  const market = useMarket();
+
+  return (
+    <section>
+      <p>Status: {market.status}</p>
+      <p>Close: {market.current?.close ?? '-'}</p>
+      <p>Change: {market.change}</p>
+    </section>
+  );
+}
+```
+
+Notice the important part: `getSnapshot` returns the current cached snapshot. It does not create a fresh object during render.
+
+If a component only cares about the latest close price, make the snapshot smaller:
+
+```tsx
+export function useCurrentClose() {
+  return useSyncExternalStore(
+    marketStore.subscribe,
+    () => marketStore.getSnapshot().current?.close ?? null,
+    () => null,
+  );
+}
+```
+
+Now that component only re-renders when the selected primitive changes.
+
+```tsx
+function CurrentPrice() {
+  const close = useCurrentClose();
+
+  return <strong>{close ?? '-'}</strong>;
+}
+```
 
 ## Stable Snapshots
 
@@ -346,9 +500,10 @@ We used `useSyncExternalStore` with:
 1. Online status
 2. URL pathname
 3. `localStorage`
-4. Stable object snapshots
-5. Field selectors
-6. Server rendering fallbacks
+4. WebSocket-backed caches
+5. Stable object snapshots
+6. Field selectors
+7. Server rendering fallbacks
 
 The core contract stayed the same every time:
 

@@ -1,16 +1,22 @@
 ---
-title: 'Reading External State with useSyncExternalStore, Part 1'
+title: 'useSyncExternalStore, Without the Mystery: Part 1'
 published: 2026-06-15
 draft: true
 description: 'Learn the basic useSyncExternalStore contract and what React roughly does internally when an external store changes.'
 tags: ['javascript', 'typescript', 'react']
 ---
 
+Have you ever had some state sitting just outside React, then wondered why your component did not update when that state changed?
+
+That is the exact little gap `useSyncExternalStore` is built for.
+
 Most React state is boring in a good way.
 
 You call `useState`, React stores the value, and your component re-renders when that value changes.
 
 ```tsx
+import { useState } from 'react';
+
 function Counter() {
   const [count, setCount] = useState(0);
 
@@ -35,7 +41,7 @@ The short version:
 
 **`useSyncExternalStore` lets React read and subscribe to state that lives outside React.**
 
-In this first part, we'll keep the example small. One store, one component, and then a practical look at what React does internally.
+In this first part, we'll keep the scope small: one tiny store, one component, and a practical look at what React roughly does internally.
 
 ## The Problem
 
@@ -243,12 +249,23 @@ function useTinyExternalStore<T>(
 ) {
   const snapshot = getSnapshot();
 
-  // During commit, React subscribes to future changes.
-  subscribe(() => {
+  afterReactCommits(() => {
+    // During commit, React subscribes to future changes.
+    return subscribe(() => {
+      const nextSnapshot = getSnapshot();
+
+      if (!Object.is(snapshot, nextSnapshot)) {
+        // Tell React this component needs to render again.
+        rerender();
+      }
+    });
+  });
+
+  beforeReactCommits(() => {
     const nextSnapshot = getSnapshot();
 
     if (!Object.is(snapshot, nextSnapshot)) {
-      // Tell React this component needs to render again.
+      // The store changed while React was rendering.
       rerender();
     }
   });
@@ -336,7 +353,7 @@ re-render if changed
 
 React owns the rendering. The external store owns the data. `useSyncExternalStore` is the bridge between them.
 
-In Part 2, we'll cover the stuff we skipped here: `localStorage`, online status, URL state, server rendering, selectors, and the rough edges that show up in real apps.
+In [Part 2](/posts/usesyncexternalstore-real-world-cases), we'll cover the stuff we skipped here: `localStorage`, online status, URL state, server rendering, selectors, and the rough edges that show up in real apps.
 
 ## References
 
