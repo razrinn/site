@@ -6,42 +6,53 @@ import DividerText from '~/components/DividerText.astro';
 
 <Layout
   title="Formatting Showcase"
-  description="A standalone page that demonstrates common article formatting and UI sections."
+  description="A standalone page that demonstrates supported article formatting and UI sections."
 >
   <PageHeader title="Formatting Showcase" />
 
   <article class="prose py-7.5" data-pagefind-body>
     <p>
-      This page is a compact reference for the visual pieces a post might need: headings,
-      copy blocks, lists, code, tables, callouts, cards, media, and action sections.
+      This page is a visual reference for the formatting this site supports. It lives
+      outside the content directory, so it can be used as a stable playground without
+      becoming a real blog post.
     </p>
 
     <DividerText text="Typography" />
 
     <h1>Heading One</h1>
     <p>
-      Use a top-level heading for the main idea. Keep paragraphs short enough to scan,
-      especially when the surrounding page already has navigation and metadata.
+      Use this for the main topic. Paragraphs should stay short enough to scan, because
+      long technical posts already ask a lot from the reader.
     </p>
 
     <h2>Heading Two</h2>
     <p>
-      Inline code like <code>useSyncExternalStore</code>, <code>getSnapshot</code>, and
-      <code>subscribe</code> should stand out without becoming louder than the sentence.
+      Use inline code for APIs like <code>useSyncExternalStore</code>, values like
+      <code>null</code>, and filenames like <code>src/pages/index.astro</code>. You can
+      also use <strong>bold text</strong>, <em>italic text</em>, <s>deleted text</s>,
+      <mark>highlighted text</mark>, and regular <a href="/">links</a>.
     </p>
 
     <h3>Heading Three</h3>
     <p>
-      Links should feel obvious in running text, like <a href="/">the home page</a>, but
-      not break the reading rhythm.
+      Keyboard hints can use <kbd>Cmd</kbd> + <kbd>K</kbd>. Small labels can use
+      <small>secondary text</small>. Abbreviations can use <abbr
+        title="Application Programming Interface">API</abbr
+      >.
     </p>
+
+    <h4>Heading Four</h4>
+    <h5>Heading Five</h5>
+    <h6>Heading Six</h6>
 
     <blockquote>
       <p>
-        A good callout should slow the reader down for one useful idea, not become a
-        second article inside the article.
+        Blockquotes are useful for a short idea worth separating from the flow. Keep them
+        short, otherwise they become an article inside the article.
       </p>
     </blockquote>
+
+    <hr />
 
     <DividerText text="Lists" />
 
@@ -53,7 +64,7 @@ import DividerText from '~/components/DividerText.astro';
       <li>No fake hierarchy unless it actually helps</li>
     </ul>
 
-    <p>Use ordered lists for sequence:</p>
+    <p>Use ordered lists for steps:</p>
 
     <ol>
       <li>Read the current value.</li>
@@ -61,9 +72,28 @@ import DividerText from '~/components/DividerText.astro';
       <li>Render again when the value changes.</li>
     </ol>
 
+    <p>Nested lists are supported, but should stay shallow:</p>
+
+    <ul>
+      <li>
+        External store
+        <ul>
+          <li>Owns the data</li>
+          <li>Notifies subscribers</li>
+        </ul>
+      </li>
+      <li>
+        React component
+        <ul>
+          <li>Reads a snapshot</li>
+          <li>Renders UI</li>
+        </ul>
+      </li>
+    </ul>
+
     <DividerText text="Code" />
 
-    <p>Small code examples should be complete enough to understand on their own.</p>
+    <p>Plain code blocks work for quick examples.</p>
 
     <pre><code>{`function createCounter() {
   let count = 0;
@@ -84,6 +114,33 @@ import DividerText from '~/components/DividerText.astro';
 count: 1
 count: 2`}</code></pre>
 
+    <p>Use titled code blocks in Markdown posts when the filename matters:</p>
+
+    <div class="expressive-code">
+      <figure class="frame has-title">
+        <figcaption><span class="title">counterStore.ts</span></figcaption>
+        <pre><code>{`type Listener = () => void;
+
+let count = 0;
+const listeners = new Set<Listener>();
+
+export function getSnapshot() {
+  return count;
+}`}</code></pre>
+      </figure>
+    </div>
+
+    <p>Use terminal-style blocks when showing commands:</p>
+
+    <div class="expressive-code">
+      <figure class="frame has-title is-terminal">
+        <figcaption><span class="title">Terminal</span></figcaption>
+        <pre><code>{`bun run build
+astro build
+pagefind --site dist`}</code></pre>
+      </figure>
+    </div>
+
     <DividerText text="Tables" />
 
     <table>
@@ -102,8 +159,8 @@ count: 2`}</code></pre>
         </tr>
         <tr>
           <td><code>useContext</code></td>
-          <td>React passes shared value down</td>
-          <td>You need subscriptions to an external store</td>
+          <td>React passes shared values down</td>
+          <td>You need external subscriptions</td>
         </tr>
         <tr>
           <td><code>useSyncExternalStore</code></td>
@@ -113,28 +170,80 @@ count: 2`}</code></pre>
       </tbody>
     </table>
 
-    <DividerText text="Callouts" />
+    <DividerText text="Admonitions" />
 
-    <section class="grid gap-4 not-prose">
-      <div class="rounded-xl border-2 border-blue/30 bg-blue/8 p-4">
-        <h2 class="mb-2 text-lg font-semibold text-blue">Note</h2>
-        <p class="m-0 text-sm/6">
-          Use this for context that helps, but does not need to interrupt the main flow.
+    <aside class="admonition" data-admonition-type="note" aria-label="Note">
+      <p class="admonition-title" aria-hidden="true">Note</p>
+      <div class="admonition-content">
+        <p>Use notes for context that helps, but does not interrupt the main flow.</p>
+      </div>
+    </aside>
+
+    <aside class="admonition" data-admonition-type="tip" aria-label="Tip">
+      <p class="admonition-title" aria-hidden="true">Tip</p>
+      <div class="admonition-content">
+        <p>Use tips for practical advice the reader can apply immediately.</p>
+      </div>
+    </aside>
+
+    <aside class="admonition" data-admonition-type="important" aria-label="Important">
+      <p class="admonition-title" aria-hidden="true">Important</p>
+      <div class="admonition-content">
+        <p>
+          Use important callouts for details that change how the example should be read.
         </p>
       </div>
-      <div class="rounded-xl border-2 border-green/30 bg-green/8 p-4">
-        <h2 class="mb-2 text-lg font-semibold text-green">Tip</h2>
-        <p class="m-0 text-sm/6">
-          Use this for practical advice the reader can apply immediately.
-        </p>
+    </aside>
+
+    <aside class="admonition" data-admonition-type="caution" aria-label="Caution">
+      <p class="admonition-title" aria-hidden="true">Caution</p>
+      <div class="admonition-content">
+        <p>Use cautions when a small mistake can make the result confusing.</p>
       </div>
-      <div class="rounded-xl border-2 border-yellow/30 bg-yellow/8 p-4">
-        <h2 class="mb-2 text-lg font-semibold text-yellow">Caution</h2>
-        <p class="m-0 text-sm/6">
-          Use this when a small mistake can make an example confusing or misleading.
-        </p>
+    </aside>
+
+    <aside class="admonition" data-admonition-type="warning" aria-label="Warning">
+      <p class="admonition-title" aria-hidden="true">Warning</p>
+      <div class="admonition-content">
+        <p>Use warnings when the wrong move can break data, security, or user trust.</p>
       </div>
-    </section>
+    </aside>
+
+    <DividerText text="Dialogue" />
+
+    <aside
+      class="character-dialogue align-left"
+      data-character="owl"
+      aria-label="Character dialogue: owl"
+    >
+      <img
+        class="character-dialogue-image"
+        src="/owl.webp"
+        alt="owl"
+        loading="lazy"
+        width="100"
+      />
+      <div class="character-dialogue-content">
+        <p>Wait, so the store owns the data, and React only reads snapshots?</p>
+      </div>
+    </aside>
+
+    <aside
+      class="character-dialogue align-right"
+      data-character="duck"
+      aria-label="Character dialogue: duck"
+    >
+      <img
+        class="character-dialogue-image"
+        src="/duck.webp"
+        alt="duck"
+        loading="lazy"
+        width="100"
+      />
+      <div class="character-dialogue-content">
+        <p>Exactly. React renders from the snapshot and subscribes for changes.</p>
+      </div>
+    </aside>
 
     <DividerText text="Cards" />
 
@@ -153,24 +262,98 @@ count: 2`}</code></pre>
           The function that tells React when the external value may have changed.
         </p>
       </article>
+      <article class="rounded-xl border-2 border-foreground/10 p-4">
+        <p class="mb-2 text-sm text-foreground/70">Status</p>
+        <h2 class="mb-2 text-xl font-semibold text-green">Ready</h2>
+        <p class="text-sm/6">Use color sparingly to make status easy to scan.</p>
+      </article>
+      <article class="rounded-xl border-2 border-foreground/10 p-4">
+        <p class="mb-2 text-sm text-foreground/70">Status</p>
+        <h2 class="mb-2 text-xl font-semibold text-yellow">Needs Review</h2>
+        <p class="text-sm/6">Keep labels short so cards do not become noisy.</p>
+      </article>
     </section>
 
+    <DividerText text="GitHub Card" />
+
+    <div class="github-card">
+      <div class="gh-title">
+        <span class="gh-avatar" style="background-image: url('/favicon.ico')"></span>
+        <a class="gh-text" href="https://github.com/razrinn/site">razrinn/site</a>
+        <span class="gh-icon"></span>
+      </div>
+      <div class="gh-description">Example rendering for the GitHub card directive.</div>
+      <div class="gh-chips">
+        <span class="gh-stars">123</span>
+        <span class="gh-forks">4</span>
+        <span class="gh-license">MIT</span>
+        <span class="gh-language">TypeScript</span>
+      </div>
+    </div>
+
     <DividerText text="Media" />
+
+    <figure>
+      <img src="/duck.webp" alt="Duck mascot" />
+      <figcaption>A normal image with a caption.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="/duck.webp" alt="Pixelated duck mascot" data-pixelated />
+      <figcaption>Pixelated images are useful for sprites or tiny art.</figcaption>
+    </figure>
 
     <figure>
       <div
         class="flex aspect-video items-center justify-center rounded-xl border-8 border-foreground/10 bg-accent/8 text-center text-accent"
       >
-        Image or demo preview
+        Embedded demo or video placeholder
       </div>
-      <figcaption>A caption should explain why the visual exists.</figcaption>
+      <figcaption>A caption should explain why the media exists.</figcaption>
     </figure>
+
+    <DividerText text="Disclosure" />
+
+    <details>
+      <summary>Click to reveal the extra detail</summary>
+      <p>
+        Use disclosure blocks for optional context. If the reader must know it, do not
+        hide it.
+      </p>
+    </details>
+
+    <DividerText text="Math" />
+
+    <p>
+      Inline math is supported in content posts, like <span class="katex">O(n)</span>.
+    </p>
+
+    <div class="katex-display">
+      <span class="katex">total = cache hits + network requests</span>
+    </div>
+
+    <DividerText text="Layout Sections" />
+
+    <section class="grid gap-4 not-prose">
+      <div class="rounded-xl border-2 border-foreground/10 p-4">
+        <h2 class="mb-2 text-xl font-semibold text-heading2">Full-width Section</h2>
+        <p class="text-sm/6">
+          Good for summaries, next steps, and standalone explanations.
+        </p>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-3">
+        <div class="rounded-xl border-2 border-foreground/10 p-4 text-sm/6">One</div>
+        <div class="rounded-xl border-2 border-foreground/10 p-4 text-sm/6">Two</div>
+        <div class="rounded-xl border-2 border-foreground/10 p-4 text-sm/6">Three</div>
+      </div>
+    </section>
 
     <DividerText text="Actions" />
 
     <section class="flex flex-wrap gap-3 not-prose">
       <a class="button" href="/">Primary link</a>
       <a class="button" href="/posts">Archive link</a>
+      <button type="button">Button</button>
     </section>
   </article>
 </Layout>
