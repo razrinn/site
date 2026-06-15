@@ -43,6 +43,7 @@ For build/tutorial posts:
 - Use inline `code` for APIs, variables, functions, and technical terms.
 - Use fenced code blocks with language tags.
 - Step titles should be short, ideally under 5 words.
+- If a post uses external references, add a "References" section at the end with the source URLs.
 
 ## Tone Examples
 
@@ -82,6 +83,8 @@ Avoid dry titles:
 - "A Comprehensive Guide to JavaScript Closures"
 - "Advanced Closure Patterns in Modern JavaScript"
 
+Keep titles creative enough to feel human. Avoid repeating the same title pattern across posts unless it is intentionally part of a series.
+
 ## Checklist
 
 - [ ] Relatable opening
@@ -91,5 +94,6 @@ Avoid dry titles:
 - [ ] Under-the-hood explanation
 - [ ] Practical real-world section
 - [ ] Diagrams where flow is hard to see
+- [ ] References section when external sources were used
 - [ ] Casual but accurate tone
 - [ ] Short, confidence-building wrap-up

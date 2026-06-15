@@ -1,0 +1,176 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import PageHeader from '~/components/PageHeader.astro';
+import DividerText from '~/components/DividerText.astro';
+---
+
+<Layout
+  title="Formatting Showcase"
+  description="A standalone page that demonstrates common article formatting and UI sections."
+>
+  <PageHeader title="Formatting Showcase" />
+
+  <article class="prose py-7.5" data-pagefind-body>
+    <p>
+      This page is a compact reference for the visual pieces a post might need: headings,
+      copy blocks, lists, code, tables, callouts, cards, media, and action sections.
+    </p>
+
+    <DividerText text="Typography" />
+
+    <h1>Heading One</h1>
+    <p>
+      Use a top-level heading for the main idea. Keep paragraphs short enough to scan,
+      especially when the surrounding page already has navigation and metadata.
+    </p>
+
+    <h2>Heading Two</h2>
+    <p>
+      Inline code like <code>useSyncExternalStore</code>, <code>getSnapshot</code>, and
+      <code>subscribe</code> should stand out without becoming louder than the sentence.
+    </p>
+
+    <h3>Heading Three</h3>
+    <p>
+      Links should feel obvious in running text, like <a href="/">the home page</a>, but
+      not break the reading rhythm.
+    </p>
+
+    <blockquote>
+      <p>
+        A good callout should slow the reader down for one useful idea, not become a
+        second article inside the article.
+      </p>
+    </blockquote>
+
+    <DividerText text="Lists" />
+
+    <p>Use unordered lists for related ideas:</p>
+
+    <ul>
+      <li>Short, scannable points</li>
+      <li>One idea per bullet</li>
+      <li>No fake hierarchy unless it actually helps</li>
+    </ul>
+
+    <p>Use ordered lists for sequence:</p>
+
+    <ol>
+      <li>Read the current value.</li>
+      <li>Subscribe to changes.</li>
+      <li>Render again when the value changes.</li>
+    </ol>
+
+    <DividerText text="Code" />
+
+    <p>Small code examples should be complete enough to understand on their own.</p>
+
+    <pre><code>{`function createCounter() {
+  let count = 0;
+
+  return {
+    get() {
+      return count;
+    },
+    increment() {
+      count++;
+    },
+  };
+}`}</code></pre>
+
+    <p>Terminal output should be visually separate from source code.</p>
+
+    <pre><code>{`$ node counter.js
+count: 1
+count: 2`}</code></pre>
+
+    <DividerText text="Tables" />
+
+    <table>
+      <thead>
+        <tr>
+          <th>Pattern</th>
+          <th>Use When</th>
+          <th>Skip When</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>useState</code></td>
+          <td>React owns the value</td>
+          <td>The source lives outside React</td>
+        </tr>
+        <tr>
+          <td><code>useContext</code></td>
+          <td>React passes shared value down</td>
+          <td>You need subscriptions to an external store</td>
+        </tr>
+        <tr>
+          <td><code>useSyncExternalStore</code></td>
+          <td>React reads external state</td>
+          <td>It is just local UI state</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <DividerText text="Callouts" />
+
+    <section class="grid gap-4 not-prose">
+      <div class="rounded-xl border-2 border-blue/30 bg-blue/8 p-4">
+        <h2 class="mb-2 text-lg font-semibold text-blue">Note</h2>
+        <p class="m-0 text-sm/6">
+          Use this for context that helps, but does not need to interrupt the main flow.
+        </p>
+      </div>
+      <div class="rounded-xl border-2 border-green/30 bg-green/8 p-4">
+        <h2 class="mb-2 text-lg font-semibold text-green">Tip</h2>
+        <p class="m-0 text-sm/6">
+          Use this for practical advice the reader can apply immediately.
+        </p>
+      </div>
+      <div class="rounded-xl border-2 border-yellow/30 bg-yellow/8 p-4">
+        <h2 class="mb-2 text-lg font-semibold text-yellow">Caution</h2>
+        <p class="m-0 text-sm/6">
+          Use this when a small mistake can make an example confusing or misleading.
+        </p>
+      </div>
+    </section>
+
+    <DividerText text="Cards" />
+
+    <section class="grid gap-4 sm:grid-cols-2 not-prose">
+      <article class="rounded-xl border-2 border-foreground/10 p-4">
+        <p class="mb-2 text-sm text-foreground/70">Concept</p>
+        <h2 class="mb-2 text-xl font-semibold text-heading2">Snapshot</h2>
+        <p class="text-sm/6">
+          The value React reads from an external source during render.
+        </p>
+      </article>
+      <article class="rounded-xl border-2 border-foreground/10 p-4">
+        <p class="mb-2 text-sm text-foreground/70">Contract</p>
+        <h2 class="mb-2 text-xl font-semibold text-heading2">Subscribe</h2>
+        <p class="text-sm/6">
+          The function that tells React when the external value may have changed.
+        </p>
+      </article>
+    </section>
+
+    <DividerText text="Media" />
+
+    <figure>
+      <div
+        class="flex aspect-video items-center justify-center rounded-xl border-8 border-foreground/10 bg-accent/8 text-center text-accent"
+      >
+        Image or demo preview
+      </div>
+      <figcaption>A caption should explain why the visual exists.</figcaption>
+    </figure>
+
+    <DividerText text="Actions" />
+
+    <section class="flex flex-wrap gap-3 not-prose">
+      <a class="button" href="/">Primary link</a>
+      <a class="button" href="/posts">Archive link</a>
+    </section>
+  </article>
+</Layout>
