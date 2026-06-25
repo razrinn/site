@@ -1,7 +1,7 @@
 ---
 title: 'useSyncExternalStore, Without the Mystery: Part 1'
 published: 2026-06-15
-draft: true
+draft: false
 description: 'Learn the basic useSyncExternalStore contract and what React roughly does internally when an external store changes.'
 tags: ['javascript', 'typescript', 'react']
 ---
